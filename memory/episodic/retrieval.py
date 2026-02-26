@@ -1,0 +1,1 @@
+﻿def retrieve(): return None

@@ -1,0 +1,7 @@
+﻿slow_drift_warn: 0.01
+slow_drift_crit: 0.012
+reset: 0.015
+cooldown_steps: 10
+max_depth_ok: 3
+max_depth_warn: 2
+max_depth_crit: 1
