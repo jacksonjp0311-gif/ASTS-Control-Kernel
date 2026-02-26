@@ -1,33 +1,10 @@
-﻿# Python
-__pycache__/
+﻿__pycache__/
 *.pyc
 *.pyo
-*.pyd
-*.log
-*.sqlite3
 
-# Virtual env
-.venv/
-venv/
-env/
+benchmarks/runs/
+benchmarks/reports/
+tests/stress/runs/
 
-# OS
-.DS_Store
-Thumbs.db
-
-# IDE
-.vscode/
-.idea/
-
-# Local state (keep repo clean)
-state/
-ledger/
-logs/
-benchmarks/
-tests/
-evolution/
-snapshots/
-
-# Secrets
-.env
-*.key
+*.jsonl
+*.csv

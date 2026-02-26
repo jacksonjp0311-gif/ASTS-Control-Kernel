@@ -1,0 +1,1 @@
+﻿def compact(): pass

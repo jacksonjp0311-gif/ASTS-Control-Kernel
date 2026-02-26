@@ -1,0 +1,12 @@
+{
+  "backoff": 3,
+  "crit_streak": 3,
+  "k": 40,
+  "last_reset_k": 19,
+  "reset_events": [
+    3,
+    11,
+    19
+  ],
+  "warn_streak": 0
+}
