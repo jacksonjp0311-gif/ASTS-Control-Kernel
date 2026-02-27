@@ -1,9 +1,21 @@
 # Pulse Feedback Policy (PFP)
+This directory contains the PFP overlay used for pulse-based stabilization experiments.
 
-Optional pulse controller layered above base ASTS step execution.
+## What it does
+- Triggers pulse events from slow-drift and predicted-drift thresholds.
+- Persists pulse cooldown state and logs benchmark-relevant pulse telemetry.
 
-## Files
-- `controller.py`: pulse trigger, contraction estimate, state updates.
-- `prediction.py`: one-step drift extrapolation.
-- `state_io.py`: persistent pulse state I/O.
-- `config.py`: threshold loading with sensible defaults.
+## How it works
+- `controller.py` computes trigger/contract behavior and writes pulse metadata.
+- `prediction.py` estimates one-step drift trend.
+- `state_io.py` persists pulse counters and cooldown markers.
+- `config.py` resolves PFP thresholds and cooldown settings.
+
+## Mini directory
+- `controller.py`
+- `prediction.py`
+- `state_io.py`
+- `config.py`
+
+## Notes
+- Keep pulse logic aligned with benchmark analysis fields.

@@ -1,7 +1,12 @@
 # Memory
+This directory contains memory subsystem scaffolding for episodic and summary behaviors.
 
-Memory subsystem placeholders.
+## What it does
+- Defines extension points for future memory-aware control patterns.
 
-## Subdirectories
-- `episodic/`: episode boundaries, replay, storage hooks.
-- `summaries/`: summarization and windowing helpers.
+## Mini directory
+- `episodic/`
+- `summaries/`
+
+## Notes
+- Current implementation is intentionally lightweight/placeholding.

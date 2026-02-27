@@ -1,8 +1,18 @@
 # Ledger
+This directory contains append-log helpers and future ledger hardening stubs.
 
-Append-only event recording and replay scaffolding.
+## What it does
+- Records step events as immutable history (`ledger.json`).
 
-## Files
-- `ledger.py`: appends structured step entries to `ledger.json`.
-- `replay.py`: replay placeholder.
-- `compaction.py`, `hashchain.py`: future hardening hooks.
+## How it works
+- `ledger.py` appends events.
+- `replay.py`, `compaction.py`, and `hashchain.py` provide extension points.
+
+## Mini directory
+- `ledger.py`
+- `replay.py`
+- `compaction.py`
+- `hashchain.py`
+
+## Notes
+- Preserve append-only semantics for forensic integrity.

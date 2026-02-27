@@ -84,6 +84,106 @@ ASTS-Control-Kernel/
 └─ pyproject.toml          # Python project metadata
 ```
 
+## Root folder mini map
+Quick directory guide for top-level project folders:
+
+### engine/
+- **Engine role**: Core run pipeline and deterministic step orchestration.
+- **How it works**: `engine/execution/runner.py` executes step order and attaches monitoring/recovery/ledger events; `engine/recovery/*` governs escalation and gates.
+- **Mini directory**: `execution/`, `recovery/`.
+
+### runtime/
+- **Engine role**: Observer collection and telemetry-field synthesis.
+- **How it works**: Domain observers emit metric slices, then aggregation composes canonical `theta`.
+- **Mini directory**: `observers/`, `telemetry_field/`.
+
+### monitoring/
+- **Engine role**: Observational operator surface and alert evaluation.
+- **How it works**: `alerts.py` computes status/action hints, `monitor.py` prints telemetry + assessment.
+- **Mini directory**: `monitor.py`, `alerts.py`, `dashboards/`.
+
+### metrics/
+- **Engine role**: Signal generation for control and recovery.
+- **How it works**: Drift baseline + multiscale smoothing combine with divergence/pressure/horizon modules.
+- **Mini directory**: `drift/`, `divergence/`, `pressure/`, `horizon/`.
+
+### control/
+- **Engine role**: Policy primitives for constraint shaping and stabilization support.
+- **How it works**: Governor and autostabilizer utilities are consumed by adapters/recovery flows.
+- **Mini directory**: `governor_v2.py`, `autostabilizer_v2.py`.
+
+### stability/
+- **Engine role**: Optional stabilization overlays (PFP).
+- **How it works**: PFP predicts/thresholds slow drift, emits pulse events, persists pulse state.
+- **Mini directory**: `pfp/`.
+
+### adapters/
+- **Engine role**: Integration wrapper layer.
+- **How it works**: Bridges external skill entrypoints into ASTS step execution.
+- **Mini directory**: `openclaw/`.
+
+### benchmarks/
+- **Engine role**: Experimental measurement + report generation.
+- **How it works**: Runs PFP benchmark loops and writes analysis artifacts.
+- **Mini directory**: `run_pfp_benchmark.py`, `pfp_report.py`, `pfp_export_csv.py`, `recorder.py`.
+
+### tests/
+- **Engine role**: Verification and stress evaluation.
+- **How it works**: `pytest` smoke tests validate baseline behavior; `tests/stress/` runs parameter sweeps.
+- **Mini directory**: `test_*.py`, `stress/`.
+
+### ledger/
+- **Engine role**: Historical run-event append surface.
+- **How it works**: Structured `STEP` events are appended to ledger output.
+- **Mini directory**: `ledger.py`, `replay.py`, `compaction.py`, `hashchain.py`.
+
+### state/
+- **Engine role**: Runtime persistence and diagnostics.
+- **How it works**: Stores drift, baseline, recovery, and pulse state files plus diagnostic logs.
+- **Mini directory**: `*.json` state files, `core_analysis/`, `core_dumps/`, `patch_logs/`.
+
+### configs/
+- **Engine role**: Contract and threshold references.
+- **How it works**: Schemas and static config examples support maintainability and validation.
+- **Mini directory**: `thresholds.yaml`, `schemas/`.
+
+### invariants/
+- **Engine role**: Deterministic consistency primitives.
+- **How it works**: Fingerprinting/validation helpers protect telemetry comparability.
+- **Mini directory**: `fingerprint/`.
+
+### memory/
+- **Engine role**: Future memory subsystem extension point.
+- **How it works**: Episodic and summarization placeholders define future interfaces.
+- **Mini directory**: `episodic/`, `summaries/`.
+
+### partition/
+- **Engine role**: Future partitioning/budget API surface.
+- **How it works**: Placeholder modules expose minimal partition/compression/budget hooks.
+- **Mini directory**: `phi_partition.py`, `compression.py`, `budgeter.py`.
+
+### experiments/
+- **Engine role**: Non-production exploratory workspace.
+- **How it works**: Keeps scenarios/notebooks isolated from release runtime.
+- **Mini directory**: `notebooks/`, `scenarios/`.
+
+## Folder mini-README system
+Every major project folder includes a local `README.md` (mini README) so each scope can be understood in-place without scanning the full repository first.
+
+### How to use mini READMEs (Human workflow)
+1. Start in the folder you plan to modify.
+2. Read that folder’s `README.md` first for scope, contracts, and key files.
+3. Follow the listed mini directory entries to jump directly to relevant modules.
+
+### How to use mini READMEs (AI workflow)
+1. Treat each folder `README.md` as the local contract before editing files in that scope.
+2. Preserve deterministic execution order and telemetry/recovery contract boundaries.
+3. Use inter-folder links/contracts to avoid out-of-scope state edits or bypassing orchestrator behavior.
+
+## Requirements
+- Python 3.10+
+- No third-party dependencies required for core execution in this repository snapshot
+
 ## Quickstart
 
 ```bash
@@ -99,7 +199,7 @@ python benchmarks/pfp_report.py
 
 ## Release posture (v1.0)
 
-This repository is now documented as **v1.0 operational baseline**:
+This repository is documented as a **v1.0 operational baseline**:
 - deterministic step pipeline
 - persistent recovery state with safeguards
 - benchmark + stress scaffolding
@@ -109,5 +209,5 @@ This repository is now documented as **v1.0 operational baseline**:
 
 To keep the kernel maintainable:
 - runtime-generated artifacts belong in `state/`, `benchmarks/runs/`, and `tests/stress/runs/`
-- historical backup trees must be considered **archive-only** and excluded from active development workflows
-- see folder-level README files for boundaries and ownership
+- historical backup trees are **archive-only** and excluded from active development workflows
+- folder mini READMEs define local ownership and usage boundaries

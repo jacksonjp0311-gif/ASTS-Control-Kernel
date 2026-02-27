@@ -1,7 +1,14 @@
 # Fingerprint Invariants
+This directory implements payload fingerprinting utilities.
 
-Provides deterministic SHA-256 fingerprinting for telemetry payloads.
+## What it does
+- Computes stable SHA-256 fingerprints for telemetry payloads.
+- Hosts lightweight validator/registry scaffolding.
 
-## Files
-- `fingerprint.py`: hash generator.
-- `registry.py`, `validators.py`: invariant scaffolding.
+## Mini directory
+- `fingerprint.py`
+- `validators.py`
+- `registry.py`
+
+## Notes
+- Fingerprints should use canonicalized serialization (`sort_keys=True`).

@@ -1,6 +1,11 @@
 # Stability
+This directory contains optional stability policy overlays.
 
-Stability-specific policy modules.
+## What it does
+- Adds extra stabilization layers on top of the base ASTS runtime loop.
 
-## Subdirectories
-- `pfp/`: pulse feedback policy implementation.
+## Mini directory
+- `pfp/`
+
+## Notes
+- Overlay policies should not bypass engine recovery contracts.

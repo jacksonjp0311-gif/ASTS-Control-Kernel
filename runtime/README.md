@@ -1,7 +1,16 @@
 # Runtime
+This directory contains observer collection and telemetry field composition.
 
-Observer and telemetry-field runtime components.
+## What it does
+- Collects observer reports and builds canonical runtime telemetry payloads.
 
-## Subdirectories
-- `observers/`: domain observers producing metric payloads.
-- `telemetry_field/`: aggregation, normalization, contract utilities.
+## How it works
+- `observers/` emits domain metrics.
+- `telemetry_field/` normalizes and aggregates those metrics into `theta`.
+
+## Mini directory
+- `observers/`
+- `telemetry_field/`
+
+## Notes
+- Runtime contracts here feed monitoring and recovery directly.

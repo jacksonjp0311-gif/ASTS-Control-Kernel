@@ -1,7 +1,17 @@
 # Engine
+This directory is the ASTS runtime core for execution and recovery decisions.
 
-Core deterministic runtime loop and recovery subsystem.
+## What it does
+- Orchestrates per-step observer->telemetry->assessment->recovery flow.
+- Applies deterministic recovery policy with persisted safety gates.
 
-## Subdirectories
-- `execution/`: session and step orchestration.
-- `recovery/`: policy decisioning, persistence, and side-effect execution.
+## How it works
+- `execution/` runs sessions and step pipelines.
+- `recovery/` decides modes and executes approved side effects.
+
+## Mini directory
+- `execution/`
+- `recovery/`
+
+## Notes
+- This is the primary truth surface for runtime behavior.

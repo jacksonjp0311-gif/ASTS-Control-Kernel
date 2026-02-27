@@ -1,7 +1,15 @@
 # Tests
+This directory contains validation and stress-support tooling.
 
-Validation and stress tooling for ASTS.
+## What it does
+- Hosts smoke/unit tests and stress scenario runners.
 
-## Contents
-- unit smoke tests under `tests/test_*.py`
-- stress workflows under `tests/stress/`
+## How to run
+- `python -m pytest -q`
+
+## Mini directory
+- `test_*.py`
+- `stress/`
+
+## Notes
+- Stress runners emit output artifacts under `tests/stress/runs/`.

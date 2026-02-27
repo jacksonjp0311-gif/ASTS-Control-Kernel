@@ -1,8 +1,18 @@
 # Monitoring
+This directory provides operator-facing assessment and telemetry output helpers.
 
-Telemetry assessment and operator-facing output.
+## What it does
+- Evaluates warning/critical thresholds and recommended actions.
+- Prints telemetry snapshots for each runtime step.
 
-## Files
-- `monitor.py`: prints telemetry and assessment each step.
-- `alerts.py`: threshold-based level/action evaluation.
-- `dashboards/`: export adapters.
+## How it works
+- `alerts.py` evaluates conditions.
+- `monitor.py` renders operator output and status bundles.
+
+## Mini directory
+- `monitor.py`
+- `alerts.py`
+- `dashboards/`
+
+## Notes
+- Keep alert semantics synchronized with recovery thresholds where intended.

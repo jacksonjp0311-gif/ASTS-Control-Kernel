@@ -1,11 +1,18 @@
 # State
+This directory stores runtime-generated state and diagnostics.
 
-Runtime-persisted kernel state and diagnostics.
+## What it does
+- Persists baseline/drift/recovery/PFP state across steps and sessions.
+- Holds diagnostic dumps and patch logs for troubleshooting.
 
-## Typical files
-- `baseline_metrics.json`, `drift_state.json`, `pfp_state.json`
+## How it works
+- Runtime modules read/write JSON state files during execution.
+- Diagnostics may accumulate; rotate/archive regularly.
+
+## Mini directory
 - `persist_state.json`, `recovery_state.json`, `plateau_state.json`
+- `baseline_metrics.json`, `drift_state.json`, `pfp_state.json`
 - `core_analysis/`, `core_dumps/`, `patch_logs/`
 
-## Guidance
-State files are operational artifacts, not source code. Keep this directory bounded and rotate large diagnostics.
+## Notes
+- Operational artifacts only; do not treat as source code.

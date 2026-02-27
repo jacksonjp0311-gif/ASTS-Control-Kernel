@@ -1,15 +1,21 @@
 # Benchmarks
+This directory contains benchmark runners and report exporters for ASTS stability behavior.
 
-Tools for running and analyzing ASTS stability experiments.
+## What it does
+- Executes benchmark sessions and records structured run artifacts.
+- Produces analysis summaries and CSV exports for review.
 
-## Files
-- `run_pfp_benchmark.py`: executes step loop and writes JSONL run artifacts.
-- `pfp_report.py`: computes summary stats from latest run.
-- `pfp_export_csv.py`: exports benchmark runs as CSV.
-- `run_all.py`: convenience orchestration wrapper.
-- `recorder.py`: append-only event recorder utility.
+## How to run
+- `python benchmarks/run_pfp_benchmark.py`
+- `python benchmarks/pfp_report.py`
+- `python benchmarks/pfp_export_csv.py`
 
-## Output
-Generated outputs are written under:
-- `benchmarks/runs/`
-- `benchmarks/reports/`
+## Mini directory
+- `run_pfp_benchmark.py`
+- `pfp_report.py`
+- `pfp_export_csv.py`
+- `run_all.py`
+- `recorder.py`
+
+## Notes
+- Generated outputs go to `benchmarks/runs/` and `benchmarks/reports/`.

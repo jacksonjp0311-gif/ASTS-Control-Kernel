@@ -1,9 +1,15 @@
 # Experiments
+This directory is for non-production experiments and exploratory assets.
 
-Workspace for exploratory scenarios and notebooks.
+## What it does
+- Holds placeholder packages for notebooks and scenarios.
 
-## Subdirectories
-- `notebooks/`: notebook package placeholder.
-- `scenarios/`: scenario package placeholder.
+## How it works
+- Experimental content should not alter deterministic production paths without promotion review.
 
-These are intentionally non-production paths.
+## Mini directory
+- `notebooks/`
+- `scenarios/`
+
+## Notes
+- Treat as staging ground; not release-critical by default.

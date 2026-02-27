@@ -1,5 +1,15 @@
 # Stress Tests
+This directory contains stress and sweep tooling for failure-mapping and pulse behavior checks.
 
-Stress/scenario runners for pulse feedback behavior and failure-map sweeps.
+## What it does
+- Executes scripted stress scenarios and writes run JSONL artifacts.
 
-Generated run outputs are written to `tests/stress/runs/`.
+## Mini directory
+- `stress_runner.py`
+- `run_failure_map.py`
+- `sweep_alpha.py`
+- `sweep_drift_amp.py`
+- `sweep_threshold.py`
+
+## Notes
+- Use these scripts for comparative behavior analysis, not unit-level correctness checks.

@@ -1,12 +1,19 @@
 # OpenClaw Adapter
+This directory provides OpenClaw-facing skill wrappers for ASTS.
 
-Bridges OpenClaw skill calls into ASTS kernel execution.
+## What it does
+- Bridges OpenClaw skill calls to ASTS step execution.
+- Adds optional policy overlays (PFP and v2 adaptive constraints).
 
-## Files
-- `skill_entry.py`: base skill entry using `engine.execution.runner.run_step`.
-- `adaptive_skill_pfp.py`: base skill + pulse feedback control.
-- `adaptive_skill_v2.py`: base skill + governor/autostabilizer v2 hooks.
-- `adapter.py`: simple adapter shim.
+## How it works
+- `skill_entry.py` calls the base engine step function and normalizes return shape.
+- Optional wrappers enrich output with pulse-control or constraint/stabilization annotations.
 
-## Contract
-All skill functions accept `env: dict` and return a dict containing `theta` telemetry payload.
+## Mini directory
+- `skill_entry.py`
+- `adaptive_skill_pfp.py`
+- `adaptive_skill_v2.py`
+- `adapter.py`
+
+## Notes
+- Expected interface: input `env: dict` -> output dict including `theta`.

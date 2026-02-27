@@ -1,6 +1,11 @@
 # Invariants
+This directory contains invariant and consistency helpers used by telemetry pipelines.
 
-Invariant and consistency helpers.
+## What it does
+- Provides deterministic fingerprinting and validation scaffolding.
 
-## Subdirectories
-- `fingerprint/`: payload hashing and validator helpers.
+## Mini directory
+- `fingerprint/`
+
+## Notes
+- Invariant outputs should remain stable across platforms/runs.

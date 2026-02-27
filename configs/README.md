@@ -1,10 +1,15 @@
 # Configs
+This directory stores config examples and contract artifacts for ASTS.
 
-Configuration examples and schemas.
+## What it does
+- Provides schema references and static threshold examples for maintainers.
 
-## Files
-- `thresholds.yaml`: static threshold example (informational).
-- `schemas/observer_report.schema.json`: observer payload schema reference.
+## How it works
+- Runtime thresholds are primarily read from `state/thresholds.json`; files here are source-controlled references.
+
+## Mini directory
+- `thresholds.yaml`
+- `schemas/`
 
 ## Notes
-Runtime threshold loading currently uses `state/thresholds.json` for active control paths.
+- Keep schema updates backward compatible with observer/telemetry payloads.

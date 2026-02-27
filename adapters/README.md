@@ -1,9 +1,14 @@
 # Adapters
+This directory contains integration entrypoints that expose ASTS runtime capabilities to external callers.
 
-Adapters expose ASTS as external skill entrypoints.
+## What it does
+- Defines adapter boundaries so outside systems can call ASTS without touching core engine internals.
 
-## Contents
-- `openclaw/`: OpenClaw-compatible skill wrappers.
+## How it works
+- Adapter modules receive `env` payloads, invoke kernel paths, and return structured telemetry bundles.
+
+## Mini directory
+- `openclaw/` — OpenClaw adapter family and skill wrappers.
 
 ## Notes
-- Keep adapter logic thin; core orchestration should remain in `engine/`.
+- Keep adapter code thin; policy and control logic should stay in `engine/`, `monitoring/`, and `control/`.
