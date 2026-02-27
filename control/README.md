@@ -1,8 +1,16 @@
-﻿Control Layer
+# Control
+This directory contains policy helpers that shape constraints and stabilization behavior.
 
-Directory snapshot
-control/
-├── governor_v2.py
-└── autostabilizer_v2.py
+## What it does
+- Computes adaptive execution constraints from drift signals.
+- Provides cooldown-aware auto-stabilization hooks.
 
-Applies constraints and stabilization.
+## How it works
+- Functions are consumed by adapters/recovery paths; they do not own orchestration.
+
+## Mini directory
+- `governor_v2.py`
+- `autostabilizer_v2.py`
+
+## Notes
+- Keep deterministic and side-effect-minimal where possible.
