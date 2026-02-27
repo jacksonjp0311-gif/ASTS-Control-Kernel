@@ -1,7 +1,7 @@
-﻿Drift Metrics
+# Drift Metrics
 
-Directory snapshot
-metrics/drift/
-└── drift.py
+Drift signal implementation.
 
-Computes drift + baseline.
+## Files
+- `drift.py`: baseline persistence + scalar/per-key drift computation.
+- `multiscale.py`: fast/slow exponential smoothing state machine.

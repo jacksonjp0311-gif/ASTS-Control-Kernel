@@ -1,7 +1,9 @@
-﻿Pulse Feedback Layer
+# Pulse Feedback Policy (PFP)
 
-Directory snapshot
-stability/pfp/
-└── controller.py
+Optional pulse controller layered above base ASTS step execution.
 
-Optional drift modulation.
+## Files
+- `controller.py`: pulse trigger, contraction estimate, state updates.
+- `prediction.py`: one-step drift extrapolation.
+- `state_io.py`: persistent pulse state I/O.
+- `config.py`: threshold loading with sensible defaults.
