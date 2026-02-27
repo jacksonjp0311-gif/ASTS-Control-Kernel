@@ -1,10 +1,21 @@
-﻿__pycache__/
+__pycache__/
 *.pyc
 *.pyo
 
+# Generated benchmark/stress outputs
 benchmarks/runs/
 benchmarks/reports/
 tests/stress/runs/
 
+# Generated artifacts
 *.jsonl
 *.csv
+
+# Runtime state artifacts (keep hand-authored docs/config only)
+state/*.json
+state/core_analysis/*.txt
+state/core_dumps/*.txt
+state/patch_logs/*.log
+
+# Nested backup trees are archive-only and should not keep growing
+recovery_backups/**/recovery_backups/

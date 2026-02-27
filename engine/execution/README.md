@@ -1,7 +1,8 @@
-﻿Execution Module
+# Engine Execution
 
-Directory snapshot
-engine/execution/
-└── runner.py
+Execution orchestration for ASTS sessions.
 
-Runs single ASTS step and emits telemetry.
+## Files
+- `runner.py`: main step/session loop.
+- `scheduler.py`: deterministic ordering helpers.
+- `environment.py`: environment construction helper.
