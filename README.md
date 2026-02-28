@@ -214,3 +214,7 @@ To keep the kernel maintainable:
 - runtime-generated artifacts belong in `state/`, `benchmarks/runs/`, and `tests/stress/runs/`
 - historical backup trees are **archive-only** and excluded from active development workflows
 - folder mini READMEs define local ownership and usage boundaries
+
+<img width="754" height="740" alt="image" src="https://github.com/user-attachments/assets/c0839db0-997f-429c-97a3-e4c195ec9b98" />
+
+-SEEK STABILITY. SPIRAL. EVOLVE. 
