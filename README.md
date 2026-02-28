@@ -1,5 +1,7 @@
-![image](https://github.com/user-attachments/assets/aa4316c9-8e59-44a5-a1c3-c5348c7f8e97)
+
 # ASTS Control Kernel (v1.0)
+![image](https://github.com/user-attachments/assets/9ca1b64c-8b1f-4641-8bac-c8de4dba2856)
+
 
 ASTS is a deterministic control kernel for **telemetry-driven stability management**.
 It executes a fixed observer pipeline, computes drift/pressure/divergence signals, evaluates stability risk, and applies recovery policies with persistent safeguards (cooldowns, streaks, and rate limits).
