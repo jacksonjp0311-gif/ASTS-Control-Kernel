@@ -1,3 +1,4 @@
+![image](https://github.com/user-attachments/assets/aa4316c9-8e59-44a5-a1c3-c5348c7f8e97)
 # ASTS Control Kernel (v1.0)
 
 ASTS is a deterministic control kernel for **telemetry-driven stability management**.
