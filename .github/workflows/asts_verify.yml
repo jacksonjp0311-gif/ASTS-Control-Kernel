@@ -1,0 +1,25 @@
+﻿name: ASTS Verification
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+
+jobs:
+  verify:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Install deps
+        run: |
+          pip install -r requirements.txt
+      - name: Compile
+        run: |
+          python -m compileall .
+      - name: Runtime Smoke Test
+        run: |
+          python main.py
