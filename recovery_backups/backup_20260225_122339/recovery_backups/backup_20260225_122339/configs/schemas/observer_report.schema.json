@@ -1,9 +1,0 @@
-﻿{
-  "type": "object",
-  "properties": {
-    "domain": {"type": "string"},
-    "metrics": {"type": "object"},
-    "confidence": {"type": "number"}
-  },
-  "required": ["domain","metrics"]
-}
