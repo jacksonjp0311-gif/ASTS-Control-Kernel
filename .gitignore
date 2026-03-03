@@ -1,25 +1,21 @@
+﻿# Python
 __pycache__/
 *.pyc
 *.pyo
+*.pyd
 
-# Generated benchmark/stress outputs
-benchmarks/runs/
-benchmarks/reports/
-tests/stress/runs/
-
-# Generated artifacts
-*.jsonl
-*.csv
-
-# Runtime state artifacts (keep hand-authored docs/config only)
-state/*.json
-state/core_analysis/*.txt
-state/core_dumps/*.txt
-state/patch_logs/*.log
-
-# Nested backup trees are archive-only and should not keep growing
-recovery_backups/**/recovery_backups/
+# Virtual environments
 .venv/
+venv/
+
+# Runtime state
+state/
 ledger.json
-structural_snapshot/
-structural_snaps/
+recovery_state.json
+
+# OS
+Thumbs.db
+.DS_Store
+
+# Logs
+*.log
