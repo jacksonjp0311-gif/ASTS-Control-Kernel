@@ -19,3 +19,7 @@ state/patch_logs/*.log
 
 # Nested backup trees are archive-only and should not keep growing
 recovery_backups/**/recovery_backups/
+.venv/
+ledger.json
+structural_snapshot/
+structural_snaps/
