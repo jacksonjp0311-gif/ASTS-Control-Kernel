@@ -1,6 +1,6 @@
 ﻿from engine.recovery.persist import persist_over
 from engine.recovery.plateau import check as plateau_check
-from engine.recovery.controller import decide, apply
+from stability.pfp.controller import decide, apply
 from engine.recovery.executor import execute
 
 from runtime.observers.base import run_observers
@@ -112,3 +112,4 @@ def run_session(steps: int = 10):
 
 if __name__ == "__main__":
     run_session()
+
