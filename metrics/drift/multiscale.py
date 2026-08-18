@@ -2,7 +2,7 @@
 import os
 from typing import Dict
 
-STATE_DIR = os.path.join(os.path.dirname(__file__), "..", "..", "..", "state")
+STATE_DIR = os.path.join(os.path.dirname(__file__), "..", "..", "state")
 DRIFT_STATE_FILE = os.path.join(STATE_DIR, "drift_state.json")
 
 def _clamp01(x: float) -> float:

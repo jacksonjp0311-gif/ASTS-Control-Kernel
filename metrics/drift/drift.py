@@ -2,7 +2,7 @@
 import os
 from typing import Dict, Tuple
 
-STATE_DIR = os.path.join(os.path.dirname(__file__), "..", "..", "..", "state")
+STATE_DIR = os.path.join(os.path.dirname(__file__), "..", "..", "state")
 BASELINE_FILE = os.path.join(STATE_DIR, "baseline_metrics.json")
 
 def _clamp01(x: float) -> float:

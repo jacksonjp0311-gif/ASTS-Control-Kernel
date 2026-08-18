@@ -12,6 +12,8 @@ venv/
 state/
 ledger.json
 recovery_state.json
+benchmarks/runs/
+tests/stress/runs/
 
 # OS
 Thumbs.db

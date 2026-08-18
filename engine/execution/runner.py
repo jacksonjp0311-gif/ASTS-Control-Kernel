@@ -104,10 +104,10 @@ def run_step(env: dict):
 def run_session(steps: int = 10):
     print("Starting ASTS session...")
     for k in range(int(steps)):
-        print(f"\\nSTEP {k+1}")
+        print(f"\nSTEP {k+1}")
         env = {"step": k}
         run_step(env)
-    print("\\nSession complete.")
+    print("\nSession complete.")
 
 
 if __name__ == "__main__":
