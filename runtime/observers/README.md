@@ -2,7 +2,7 @@
 This directory contains domain observer implementations.
 
 ## What it does
-- Produces deterministic observer reports for code/runtime/reasoning/resources/integration domains.
+- Produces observer reports. `resources` and `runtime` are live (`host_process`). `code`, `reasoning`, and `integration` remain synthetic plant slices.
 
 ## Mini directory
 - `code_structure.py`

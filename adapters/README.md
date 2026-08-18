@@ -8,6 +8,7 @@ This directory contains integration entrypoints that expose ASTS runtime capabil
 - Adapter modules receive `env` payloads, invoke kernel paths, and return structured telemetry bundles.
 
 ## Mini directory
+- `host_process/` — live adapter: this kernel's RSS, CPU, and step wall time
 - `openclaw/` — OpenClaw adapter family and skill wrappers.
 
 ## Notes

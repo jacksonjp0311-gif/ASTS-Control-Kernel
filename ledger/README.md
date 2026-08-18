@@ -1,18 +1,19 @@
 # Ledger
-This directory contains append-log helpers and future ledger hardening stubs.
+
+Append-only JSONL history. One hashed record per line. The file is never rewritten.
 
 ## What it does
-- Records step events as immutable history (`ledger.json`).
-
-## How it works
-- `ledger.py` appends events.
-- `replay.py`, `compaction.py`, and `hashchain.py` provide extension points.
+- `append_entry` writes one `ledger.jsonl` line: `{seq, prev, hash, entry}`
+- `hashchain` SHA-256 links each record to the previous hash
+- `replay` returns entries only if the chain verifies
+- `compact` refuses — this log is not compacted
 
 ## Mini directory
 - `ledger.py`
+- `hashchain.py`
 - `replay.py`
 - `compaction.py`
-- `hashchain.py`
 
 ## Notes
-- Preserve append-only semantics for forensic integrity.
+- Genesis prev is 64 zeros.
+- Runtime artifact: `ledger.jsonl` in the process cwd (gitignored).

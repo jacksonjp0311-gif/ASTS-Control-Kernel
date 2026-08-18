@@ -1,6 +1,6 @@
 """Pressure: how close the loop is to its load budget.
 
-Uses load keys (usage, latency, complexity, load, cpu, memory).
+Uses load keys (usage, latency, load, cpu, memory). Complexity is structure, not load.
 Values already in [0, 1] are treated as fractions of capacity.
 Values above 1 are normalized by MAX_BUDGET.
 Returns None when no load key is present.
@@ -8,7 +8,7 @@ Returns None when no load key is present.
 
 from metrics.pressure.budgets import MAX_BUDGET
 
-LOAD_KEYS = frozenset({"usage", "latency", "complexity", "load", "cpu", "memory"})
+LOAD_KEYS = frozenset({"usage", "latency", "load", "cpu", "memory"})
 
 
 def _as_fraction(value):

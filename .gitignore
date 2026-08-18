@@ -11,6 +11,7 @@ venv/
 # Runtime state
 state/
 ledger.json
+ledger.jsonl
 recovery_state.json
 benchmarks/runs/
 tests/stress/runs/

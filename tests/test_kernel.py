@@ -98,7 +98,7 @@ class SignalTests(unittest.TestCase):
 
         self.assertAlmostEqual(
             compute_pressure({"usage": 0.4, "latency": 0.3, "complexity": 0.5, "coherence": 0.9}),
-            0.5,
+            0.4,
             places=6,
         )
 
@@ -162,13 +162,19 @@ class SessionTests(unittest.TestCase):
             os.chdir(tmp)
             try:
                 run_session(steps=3)
-                ledger_path = Path(tmp) / "ledger.json"
+                from ledger.ledger import replay, verify
+
+                ledger_path = Path(tmp) / "ledger.jsonl"
                 self.assertTrue(ledger_path.exists())
-                data = json.loads(ledger_path.read_text(encoding="utf-8"))
+                self.assertEqual(verify(), [])
+                data = replay()
                 self.assertEqual(len(data), 3)
                 self.assertTrue(all(row.get("type") == "STEP" for row in data))
                 self.assertTrue(all("theta" in row and "recovery" in row for row in data))
                 self.assertEqual(data[0]["recovery"]["mode"], "ok")
+                usage = data[0]["theta"]["metrics"].get("usage")
+                self.assertIsNotNone(usage)
+                self.assertGreater(usage, 0.0)
             finally:
                 os.chdir(cwd)
 

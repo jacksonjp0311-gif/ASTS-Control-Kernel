@@ -9,7 +9,9 @@ runtime/session start
   ↓
 engine.execution.runner
   ↓
-Telemetry Capture
+adapters.host_process (RSS + previous-step wall)
+  ↓
+Telemetry Capture (live usage/latency + synthetic plant)
   ↓
 metrics.drift + metrics.divergence + metrics.pressure
   ↓
@@ -27,7 +29,7 @@ Optional reset_baseline()
   ↓
 Backoff Adjustment
   ↓
-Ledger Update
+Ledger append (ledger.jsonl hash chain)
   ↓
 Next Step Loop
   ↓

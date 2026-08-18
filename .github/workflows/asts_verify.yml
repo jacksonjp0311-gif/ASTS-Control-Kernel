@@ -19,7 +19,10 @@ jobs:
           pip install -r requirements.txt
       - name: Compile
         run: |
-          python -m compileall .
+          python -m compileall -q -x archive .
+      - name: Unit tests
+        run: |
+          python -m unittest discover -s tests -v
       - name: Runtime Smoke Test
         run: |
           python main.py

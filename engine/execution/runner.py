@@ -7,6 +7,7 @@ from runtime.observers.base import run_observers
 from runtime.telemetry_field.aggregator import aggregate
 from monitoring.monitor import monitor
 from ledger.ledger import append_entry
+from adapters.host_process.probe import attach
 
 import os
 import json
@@ -30,6 +31,9 @@ def _load_thresholds(root_dir: str) -> dict:
 
 
 def run_step(env: dict):
+    # 0) Live host sample + previous-step wall time
+    attach(env)
+
     # 1) Observe + aggregate
     reports = run_observers(env)
     theta = aggregate(reports)
@@ -102,6 +106,9 @@ def run_step(env: dict):
 
 
 def run_session(steps: int = 10):
+    from adapters.host_process.probe import reset_mark
+
+    reset_mark()
     print("Starting ASTS session...")
     for k in range(int(steps)):
         print(f"\nSTEP {k+1}")

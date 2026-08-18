@@ -1,9 +1,17 @@
-﻿def observe_runtime(env):
-    step = env.get('step', 0)
-    latency = 0.3 + (0.02 * step)
-    latency = max(0, min(1, latency))
+"""Runtime slice from the previous step's real wall time."""
+
+from adapters.host_process.probe import latency_fraction
+
+
+def observe_runtime(env):
+    step_dt = env.get("step_dt") if isinstance(env, dict) else None
+    latency = latency_fraction(step_dt)
+    metrics = {}
+    if latency is not None:
+        metrics["latency"] = latency
     return {
-        'domain': 'runtime',
-        'metrics': {'latency': latency},
-        'confidence': 0.8
+        "domain": "runtime",
+        "metrics": metrics,
+        "confidence": 0.95 if latency is not None else 0.0,
+        "source": "host_process",
     }

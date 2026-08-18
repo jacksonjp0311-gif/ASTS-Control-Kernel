@@ -50,7 +50,7 @@ cd ASTS-Control-Kernel
 python main.py
 ```
 
-Ten steps. Synthetic observers. You should see drift climb with latency, then `warn` → `recover` → `crit` as slow drift crosses the published thresholds.
+Ten steps. `usage` and `latency` come from this process (RSS and previous-step wall time). Code / reasoning / integration stay a synthetic plant. Drift still climbs as the mix moves; `warn` → `recover` → `crit` remains drift-gated.
 
 | Surface | Path |
 | --- | --- |
@@ -58,7 +58,8 @@ Ten steps. Synthetic observers. You should see drift climb with latency, then `w
 | Orchestrator | `engine/execution/runner.py` |
 | Policy | `engine/recovery/controller.py` |
 | Side effects | `engine/recovery/executor.py` |
-| Ledger | `ledger.json` (cwd) |
+| Live adapter | `adapters/host_process/` |
+| Ledger | `ledger.jsonl` (cwd, hash-chained) |
 | Persistent state | `state/` |
 
 Optional PFP benchmark:
@@ -73,12 +74,13 @@ python benchmarks/pfp_report.py
 ```
 main.py
   → engine.execution.runner.run_session
-      → runtime.observers        collect domain slices
+      → adapters.host_process    RSS + previous-step wall
+      → runtime.observers        live usage/latency + synthetic plant
       → telemetry aggregator     drift / divergence / pressure / fingerprint
       → monitoring.alerts        ok / warn / crit  (reset stays drift-gated)
       → engine.recovery.controller   ladder + streaks + gates
       → engine.recovery.executor     reset_baseline only, here
-      → ledger.append_entry          STEP event
+      → ledger.append_entry          hash-chained JSONL STEP
 ```
 
 `stability/pfp/controller.py` is a shim. It re-exports `engine.recovery.controller`. There is one policy.
@@ -115,7 +117,9 @@ Current local lattice:
 - recovery ladder (`ok` then gated `reset`; witnesses cannot reset)
 - divergence agreement → 0, extremes → 1, missing → UNKNOWN
 - pressure at budget → 1, no load keys → UNKNOWN
-- 3-step session writes three `STEP` ledger rows
+- host adapter reports a real RSS and UNKNOWN latency on step 1
+- 3-step session writes three hash-chained `STEP` rows to `ledger.jsonl`
+- tampered ledger fails `replay`
 
 ## Directory map
 
@@ -125,13 +129,14 @@ ASTS-Control-Kernel/
   runtime/       observers + telemetry field
   monitoring/    alerts + operator print
   metrics/       drift (authority) · divergence / pressure (witnesses)
-  ledger/        append-only STEP log
+  ledger/        append-only JSONL + SHA-256 chain
   control/       governor / autostabilizer hooks
   stability/pfp  pulse-feedback overlay (delegates policy)
-  adapters/      OpenClaw skill entry
+  adapters/      host_process (live) · openclaw (thin)
   configs/       schemas + example thresholds
   docs/          hero graphic
-  tests/         unittest smoke
+  tests/         unittest
+  archive/       dead trees (not imported)
   state/         runtime artifacts (gitignored)
 ```
 
@@ -139,10 +144,11 @@ Each major folder has a mini-README. Read that file before editing the folder.
 
 ## Known limits
 
-- Default observers are **synthetic** and deterministic. They demonstrate the ladder; they do not inspect a live agent.
-- Divergence compares observer slices on a shared unit interval. Different domains will show some spread even when each slice is internally consistent.
+- `usage` and `latency` are live measurements of **this** Python process. They are not PulseFlow and they do not apply host QoS.
+- `code`, `reasoning`, and `integration` are still a synthetic plant. The bench is labeled.
+- Divergence compares observer slices on a shared unit interval. Live vs plant will disagree. That is the point.
 - Advisory actions (`tighten_constraints`, `request_validation`) are recorded, not wired into an external governor.
-- `memory/`, `partition/`, and most of `experiments/` are extension points.
+- `archive/` holds memory/partition/experiments stubs and old dumps. Not imported.
 
 ## License
 
