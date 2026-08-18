@@ -1,16 +1,16 @@
 # ASTS Control Kernel
 
-Bounded **corrective control** for telemetry-driven stability.
+A loop that is starting to wobble should be steered, not killed.
 
-ASTS watches an execution loop, measures drift, and applies a gated recovery ladder — warn, recover, crit, reset — without halting the run. Persistence, cooldown, and reset-rate limits keep the kernel from thrashing. The ledger is append-only.
+ASTS is a local, deterministic **control kernel**. Each step it observes the run, measures how far telemetry has moved from baseline, and applies a gated recovery ladder — warn, recover, crit, reset — without stopping the process. **Drift owns the reset.** Pressure and divergence are witnesses: they can raise a warning; they cannot reset the kernel. Missing data prints **UNKNOWN**. The ledger is append-only.
 
-This is a control kernel. It is not an agent, and it is not a claim that the process it watches is stable.
+This is not an agent. It is the thing that keeps an agent from thrashing.
 
 ![ASTS Control Kernel](docs/asts-hero.jpg)
 
 ## What it is
 
-A deterministic observer → assess → decide → execute → record pipeline for adaptive or agent-based workflows.
+A fixed observer → assess → decide → execute → record pipeline for adaptive or agent-based workflows.
 
 ```
 OBSERVE → AGGREGATE → ASSESS → DECIDE → EXECUTE → LEDGER
@@ -19,17 +19,27 @@ OBSERVE → AGGREGATE → ASSESS → DECIDE → EXECUTE → LEDGER
 | Mode | Meaning |
 | --- | --- |
 | `ok` | below warn |
-| `warn` | slow drift crossed the warn gate |
+| `warn` | slow drift, pressure, or divergence crossed a warn gate |
 | `recover` | tighten / validate, or escalate from a warn streak / plateau |
 | `crit` | slow drift crossed the critical gate |
-| `reset` | baseline reset, only if cooldown and rate-limit allow |
+| `reset` | baseline reset — drift only, and only if cooldown and rate-limit allow |
 
 A reset that fails its gates downgrades to `recover`. The reason string says so.
+
+## Signals
+
+| Signal | Source | Authority |
+| --- | --- | --- |
+| **Drift** | distance from persisted baseline, fast / slow | owns `crit` and `reset` |
+| **Divergence** | confidence-weighted disagreement between observer reports | witness — `warn` only |
+| **Pressure** | hottest load key (`usage`, `latency`, `complexity`, …) vs budget | witness — `warn` only |
+
+Fewer than two usable reports → divergence is UNKNOWN. No load keys → pressure is UNKNOWN. Neither is ever silently zero.
 
 ## What it is not
 
 - Not a live host / process governor (that is PulseFlow)
-- Not a claim that pressure or divergence are learned signals — those modules currently return fixed placeholders
+- Not a learned model and not a second policy
 - Not a rollback of an external system
 - Not a medical, safety, or production-certification surface
 
@@ -64,8 +74,8 @@ python benchmarks/pfp_report.py
 main.py
   → engine.execution.runner.run_session
       → runtime.observers        collect domain slices
-      → telemetry aggregator     drift / fast / slow / fingerprint
-      → monitoring.alerts        ok / warn / crit
+      → telemetry aggregator     drift / divergence / pressure / fingerprint
+      → monitoring.alerts        ok / warn / crit  (reset stays drift-gated)
       → engine.recovery.controller   ladder + streaks + gates
       → engine.recovery.executor     reset_baseline only, here
       → ledger.append_entry          STEP event
@@ -102,7 +112,9 @@ Current local lattice:
 
 - fingerprint stability
 - alert ok / crit
-- recovery ladder (`ok` then gated `reset`)
+- recovery ladder (`ok` then gated `reset`; witnesses cannot reset)
+- divergence agreement → 0, extremes → 1, missing → UNKNOWN
+- pressure at budget → 1, no load keys → UNKNOWN
 - 3-step session writes three `STEP` ledger rows
 
 ## Directory map
@@ -112,7 +124,7 @@ ASTS-Control-Kernel/
   engine/        step orchestrator + recovery policy
   runtime/       observers + telemetry field
   monitoring/    alerts + operator print
-  metrics/       drift (real) · divergence/pressure (placeholder)
+  metrics/       drift (authority) · divergence / pressure (witnesses)
   ledger/        append-only STEP log
   control/       governor / autostabilizer hooks
   stability/pfp  pulse-feedback overlay (delegates policy)
@@ -128,7 +140,7 @@ Each major folder has a mini-README. Read that file before editing the folder.
 ## Known limits
 
 - Default observers are **synthetic** and deterministic. They demonstrate the ladder; they do not inspect a live agent.
-- `metrics/divergence` returns `0.2`. `metrics/pressure` returns `0.3`.
+- Divergence compares observer slices on a shared unit interval. Different domains will show some spread even when each slice is internally consistent.
 - Advisory actions (`tighten_constraints`, `request_validation`) are recorded, not wired into an external governor.
 - `memory/`, `partition/`, and most of `experiments/` are extension points.
 

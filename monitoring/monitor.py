@@ -1,6 +1,11 @@
 ﻿import os
 from monitoring.alerts import evaluate
 
+
+def _fmt_signal(value):
+    return "UNKNOWN" if value is None else value
+
+
 def monitor(theta):
     root_dir = os.path.abspath(os.path.join(os.path.dirname(__file__), ".."))
     assessment = evaluate(theta, root_dir)
@@ -16,8 +21,8 @@ def monitor(theta):
     else:
         print("Drift(total):", d)
 
-    print("Divergence:", theta.get("divergence"))
-    print("Pressure:", theta.get("pressure"))
+    print("Divergence:", _fmt_signal(theta.get("divergence")))
+    print("Pressure:", _fmt_signal(theta.get("pressure")))
     print("Hash:", theta.get("hash", "")[:12])
     print("-----------------------")
 

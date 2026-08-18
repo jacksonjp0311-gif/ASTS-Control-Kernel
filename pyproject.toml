@@ -1,7 +1,7 @@
 [project]
 name = "asts-control-kernel"
 version = "1.0.0"
-description = "ASTS Control Kernel — bounded corrective control for telemetry-driven stability"
+description = "Deterministic control kernel for unstable loops. Drift resets. Pressure and divergence witness. Unknown stays unknown."
 readme = "README.md"
 license = { file = "LICENSE" }
 requires-python = ">=3.10"

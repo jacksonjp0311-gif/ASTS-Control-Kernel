@@ -35,8 +35,8 @@ def evaluate(theta, root_dir):
         drift_fast  = 0.0
         drift_slow  = 0.0
 
-    pressure   = float(theta.get("pressure", 0.0))
-    divergence = float(theta.get("divergence", 0.0))
+    pressure = _optional_unit(theta.get("pressure"))
+    divergence = _optional_unit(theta.get("divergence"))
 
     level = "ok"
     warnings = []
@@ -58,6 +58,20 @@ def evaluate(theta, root_dir):
             "request_more_context"
         ]
 
+    # Witnesses may raise warn. They never promote crit or reset.
+    pressure_warn = float(th.get("pressure_warn", DEFAULT_THRESHOLDS["pressure_warn"]))
+    divergence_warn = float(th.get("divergence_warn", DEFAULT_THRESHOLDS["divergence_warn"]))
+    if pressure is not None and pressure >= pressure_warn:
+        warnings.append(f"PRESSURE_WARN: {pressure:.6f}")
+        if level == "ok":
+            level = "warn"
+            actions += ["mark_uncertainty_high"]
+    if divergence is not None and divergence >= divergence_warn:
+        warnings.append(f"DIVERGENCE_WARN: {divergence:.6f}")
+        if level == "ok":
+            level = "warn"
+            actions += ["request_more_context"]
+
     return {
         "level": level,
         "signals": {
@@ -71,4 +85,14 @@ def evaluate(theta, root_dir):
         "actions": actions,
         "timestamp": datetime.utcnow().isoformat() + "Z"
     }
+
+
+def _optional_unit(value):
+    if value is None:
+        return None
+    try:
+        x = float(value)
+    except (TypeError, ValueError):
+        return None
+    return max(0.0, min(1.0, x))
 

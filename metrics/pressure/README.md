@@ -1,12 +1,16 @@
 # Pressure Metrics
-This directory contains pressure/load signal helpers.
+
+How close the loop is to its load budget.
 
 ## What it does
-- Computes pressure indicators from current metrics payloads.
+- Reads load keys: `usage`, `latency`, `complexity`, `load`, `cpu`, `memory`
+- Values in [0, 1] are fractions of capacity; values above 1 are divided by `MAX_BUDGET`
+- Returns the hottest load key, or `None` (UNKNOWN) when none are present
 
 ## Mini directory
 - `pressure.py`
 - `budgets.py`
 
 ## Notes
-- Current model is simple and should be calibrated with real workload traces.
+- Witness only. Can raise `warn`. Cannot promote `reset`.
+- Calibrate `MAX_BUDGET` against real traces when adapters stop being synthetic.

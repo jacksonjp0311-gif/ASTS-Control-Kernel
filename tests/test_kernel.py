@@ -50,6 +50,84 @@ class AlertTests(unittest.TestCase):
         self.assertTrue(out["warnings"])
 
 
+class SignalTests(unittest.TestCase):
+    def test_divergence_agreement_is_near_zero(self):
+        from metrics.divergence.divergence import compute_divergence
+
+        reports = [
+            {"metrics": {"a": 0.5}, "confidence": 1.0},
+            {"metrics": {"b": 0.5}, "confidence": 1.0},
+            {"metrics": {"c": 0.5}, "confidence": 0.8},
+        ]
+        v = compute_divergence(reports)
+        self.assertIsNotNone(v)
+        self.assertLess(v, 1e-9)
+
+    def test_divergence_extremes_is_one(self):
+        from metrics.divergence.divergence import compute_divergence
+
+        v = compute_divergence(
+            [
+                {"metrics": {"a": 0.0}, "confidence": 1.0},
+                {"metrics": {"b": 1.0}, "confidence": 1.0},
+            ]
+        )
+        self.assertAlmostEqual(v, 1.0, places=6)
+
+    def test_divergence_unknown_without_two_reports(self):
+        from metrics.divergence.divergence import compute_divergence
+
+        self.assertIsNone(compute_divergence([]))
+        self.assertIsNone(compute_divergence([{"metrics": {"a": 0.4}, "confidence": 1.0}]))
+        self.assertIsNone(compute_divergence([{"metrics": {}, "confidence": 1.0}, {"confidence": 1.0}]))
+
+    def test_pressure_at_budget_is_one(self):
+        from metrics.pressure.pressure import compute_pressure
+
+        self.assertAlmostEqual(compute_pressure({"usage": 1.0}), 1.0, places=6)
+        self.assertAlmostEqual(compute_pressure({"usage": 100}), 1.0, places=6)
+
+    def test_pressure_unknown_without_load_keys(self):
+        from metrics.pressure.pressure import compute_pressure
+
+        self.assertIsNone(compute_pressure({}))
+        self.assertIsNone(compute_pressure({"coherence": 0.9, "agreement": 0.8}))
+
+    def test_pressure_is_hottest_load(self):
+        from metrics.pressure.pressure import compute_pressure
+
+        self.assertAlmostEqual(
+            compute_pressure({"usage": 0.4, "latency": 0.3, "complexity": 0.5, "coherence": 0.9}),
+            0.5,
+            places=6,
+        )
+
+    def test_witness_warns_but_does_not_crit(self):
+        from monitoring.alerts import evaluate
+
+        with tempfile.TemporaryDirectory() as tmp:
+            out = evaluate(
+                {"drift": {"total": 0.0, "fast": 0.0, "slow": 0.0}, "pressure": 0.95, "divergence": 0.8},
+                tmp,
+            )
+        self.assertEqual(out["level"], "warn")
+        self.assertTrue(any(w.startswith("PRESSURE_WARN") for w in out["warnings"]))
+        self.assertTrue(any(w.startswith("DIVERGENCE_WARN") for w in out["warnings"]))
+
+    def test_unknown_witness_does_not_become_zero(self):
+        from monitoring.alerts import evaluate
+
+        with tempfile.TemporaryDirectory() as tmp:
+            out = evaluate(
+                {"drift": {"total": 0.0, "fast": 0.0, "slow": 0.0}, "pressure": None, "divergence": None},
+                tmp,
+            )
+        self.assertEqual(out["level"], "ok")
+        self.assertIsNone(out["signals"]["pressure"])
+        self.assertIsNone(out["signals"]["divergence"])
+        self.assertEqual(out["warnings"], [])
+
+
 class RecoveryTests(unittest.TestCase):
     def test_ladder_ok_then_reset(self):
         from engine.recovery import controller
@@ -66,6 +144,8 @@ class RecoveryTests(unittest.TestCase):
                 reset = controller.decide({"drift": {"slow": 0.02}}, tmp)
                 self.assertEqual(reset["mode"], "reset")
                 self.assertIn("reset_baseline", reset["actions"])
+                still_ok = controller.decide({"drift": {"slow": 0.0}, "pressure": 0.99, "divergence": 1.0}, tmp)
+                self.assertEqual(still_ok["mode"], "ok")
 
 
 class SessionTests(unittest.TestCase):
