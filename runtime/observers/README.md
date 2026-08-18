@@ -2,7 +2,8 @@
 This directory contains domain observer implementations.
 
 ## What it does
-- Produces observer reports. `resources` and `runtime` are live (`host_process`). `code`, `reasoning`, and `integration` remain synthetic plant slices.
+- LIVE: `resources` and `runtime` come from `host_process`. `--simulate`: those two slices switch to `runtime/observers/plant.py` and are labeled `source: simulation`.
+- `code`, `reasoning`, and `integration` stay synthetic in both modes.
 
 ## Mini directory
 - `code_structure.py`

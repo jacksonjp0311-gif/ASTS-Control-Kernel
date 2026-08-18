@@ -1,9 +1,12 @@
 """Resource slice from the live ASTS host process."""
 
 from adapters.host_process.probe import sample, usage_fraction
+from runtime.observers.plant import is_simulated, observe_resources_plant
 
 
 def observe_resources(env):
+    if is_simulated(env):
+        return observe_resources_plant(env)
     host = env.get("host") if isinstance(env, dict) else None
     if not isinstance(host, dict):
         host = sample()

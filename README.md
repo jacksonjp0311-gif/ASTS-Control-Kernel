@@ -47,10 +47,16 @@ Fewer than two usable reports → divergence is UNKNOWN. No load keys → pressu
 
 ```powershell
 cd ASTS-Control-Kernel
-python main.py
+python main.py --simulate
 ```
 
-Ten steps. `usage` and `latency` come from this process (RSS and previous-step wall time). Code / reasoning / integration stay a synthetic plant. Drift still climbs as the mix moves; `warn` → `recover` → `crit` remains drift-gated.
+`--simulate` is a **labeled plant**. Every step prints `SIMULATION MODE`. Latency ramps `0.3 + 0.02 * step` so you can watch `ok → warn → recover → crit`. It is not this machine.
+
+Live (default) measures this process:
+
+```powershell
+python main.py
+```
 
 | Surface | Path |
 | --- | --- |
@@ -120,6 +126,7 @@ Current local lattice:
 - host adapter reports a real RSS and UNKNOWN latency on step 1
 - 3-step session writes three hash-chained `STEP` rows to `ledger.jsonl`
 - tampered ledger fails `replay`
+- `--simulate` labels every STEP and climbs warn / recover / crit
 
 ## Directory map
 
@@ -144,8 +151,9 @@ Each major folder has a mini-README. Read that file before editing the folder.
 
 ## Known limits
 
-- `usage` and `latency` are live measurements of **this** Python process. They are not PulseFlow and they do not apply host QoS.
-- `code`, `reasoning`, and `integration` are still a synthetic plant. The bench is labeled.
+- Default is **LIVE**: `usage` and `latency` are this Python process. Not PulseFlow. No host QoS.
+- `--simulate` is a deterministic plant. The banner, the ledger, and every observer `source` say so.
+- `code`, `reasoning`, and `integration` stay synthetic in both modes.
 - Divergence compares observer slices on a shared unit interval. Live vs plant will disagree. That is the point.
 - Advisory actions (`tighten_constraints`, `request_validation`) are recorded, not wired into an external governor.
 - `archive/` holds memory/partition/experiments stubs and old dumps. Not imported.

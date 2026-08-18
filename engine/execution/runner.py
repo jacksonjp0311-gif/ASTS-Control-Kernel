@@ -31,12 +31,18 @@ def _load_thresholds(root_dir: str) -> dict:
 
 
 def run_step(env: dict):
-    # 0) Live host sample + previous-step wall time
-    attach(env)
+    simulated = bool(env.get("simulate"))
+    # 0) Live host sample + previous-step wall time (skipped in the labeled plant)
+    if simulated:
+        env["host"] = None
+        env["step_dt"] = None
+    else:
+        attach(env)
 
     # 1) Observe + aggregate
     reports = run_observers(env)
     theta = aggregate(reports)
+    theta["simulated"] = simulated
 
     # 2) Monitor (prints telemetry + returns assessment bundle)
     m = monitor(theta)
@@ -93,6 +99,7 @@ def run_step(env: dict):
     append_entry({
         "type": "STEP",
         "step": env.get("step"),
+        "simulated": simulated,
         "theta": theta,
         "monitoring": {
             "status": m.get("status"),
@@ -105,14 +112,17 @@ def run_step(env: dict):
     return theta, m, decision
 
 
-def run_session(steps: int = 10):
+def run_session(steps: int = 10, simulate: bool = False):
     from adapters.host_process.probe import reset_mark
 
     reset_mark()
-    print("Starting ASTS session...")
+    mode = "SIMULATION MODE" if simulate else "LIVE"
+    print(f"Starting ASTS session...  [{mode}]")
+    if simulate:
+        print("SIMULATION MODE — deterministic plant. Not a live process.")
     for k in range(int(steps)):
         print(f"\nSTEP {k+1}")
-        env = {"step": k}
+        env = {"step": k, "simulate": bool(simulate)}
         run_step(env)
     print("\nSession complete.")
 

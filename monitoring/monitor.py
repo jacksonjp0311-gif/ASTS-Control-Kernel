@@ -11,6 +11,8 @@ def monitor(theta):
     assessment = evaluate(theta, root_dir)
 
     print("------ TELEMETRY ------")
+    if theta.get("simulated"):
+        print("MODE: SIMULATION MODE")
     print("Metrics:", theta.get("metrics", {}))
 
     d = theta.get("drift", {})
